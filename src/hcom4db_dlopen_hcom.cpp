@@ -36,6 +36,8 @@ using GetRspCtx = int (*)(Service_Context context, Service_RspCtx *rsp);
 using GetOpInfo = int (*)(Service_Context context, Service_OpInfo *info);
 using GetMessageData = void *(*)(Service_Context context);
 using GetMessageDataLen = uint32_t (*)(Service_Context context);
+using ContextClone = Service_Context (*)(Service_Context context);
+using ContextDeClone = void (*)(Service_Context context);
 using GetRndvChannel = int (*)(Service_RndvContext context, Net_Channel *channel);
 using GetRndvCtxType = int (*)(Service_RndvContext context, Service_RndvType *type);
 using GetRndvOpInfo = int (*)(Service_RndvContext context, Service_OpInfo *info);
@@ -117,6 +119,8 @@ using HcomFunc = struct {
     GetOpInfo getOpInfo;
     GetMessageData getMessageData;
     GetMessageDataLen getMessageDataLen;
+    ContextClone contextClone;
+    ContextDeClone contextDeClone;
     GetRndvChannel getRndvChannel;
     GetRndvCtxType getRndvCtxType;
     GetRndvOpInfo getRndvOpInfo;
@@ -214,6 +218,16 @@ static int HcomDlsymServiceLayerServiceHandlerFunc(void)
     }
 
     ret = Hcom4dbLoadSymbol(g_hcomDl, "Service_GetMessageDataLen", reinterpret_cast<void **>(&g_hcomFunc.getMessageDataLen));
+    if (ret != OCK_RPC_OK) {
+        return OCK_RPC_ERR;
+    }
+
+    ret = Hcom4dbLoadSymbol(g_hcomDl, "Service_ContextClone", reinterpret_cast<void **>(&g_hcomFunc.contextClone));
+    if (ret != OCK_RPC_OK) {
+        return OCK_RPC_ERR;
+    }
+
+    ret = Hcom4dbLoadSymbol(g_hcomDl, "Service_ContextDeClone", reinterpret_cast<void **>(&g_hcomFunc.contextDeClone));
     if (ret != OCK_RPC_OK) {
         return OCK_RPC_ERR;
     }
@@ -702,6 +716,25 @@ uint32_t Service_GetMessageDataLen(Service_Context context)
     }
 
     return ret;
+}
+
+Service_Context Service_ContextClone(Service_Context context)
+{
+    Service_Context cloneCtx = 0;
+    if (g_hcomFunc.contextClone != nullptr) {
+        cloneCtx = g_hcomFunc.contextClone(context);
+    }
+
+    return cloneCtx;
+}
+
+void Service_ContextDeClone(Service_Context context)
+{
+    if (g_hcomFunc.contextDeClone != nullptr) {
+        g_hcomFunc.contextDeClone(context);
+    }
+
+    return;
 }
 
 int Service_GetRndvChannel(Service_RndvContext context, Net_Channel *channel)

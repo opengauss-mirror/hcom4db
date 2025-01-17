@@ -65,7 +65,8 @@ constexpr uint16_t MAX_CALL_WITH_PARAMS_COUNT = 8;
 constexpr uint16_t MAX_MESSAGE_SGL_COUNT = 4;
 constexpr const char *HCOM4DB_SO_NAME = "libhcom.so";
 constexpr const char *HCOM4DB_ENV_PATH = "HCOM4DB_LIB_PATH";
-constexpr int16_t DEFAULT_TIMEOUT_TIME = 1;
+constexpr int32_t DEFAULT_TIMEOUT_TIME = 1000;
+constexpr int32_t MILLOSECOND_PER_SECOND = 1000;
 }  // namespace
 
 static OckRpcLogHandler g_logFunc = nullptr;
@@ -80,6 +81,7 @@ static std::shared_mutex serviceAddMutex;
 static std::shared_mutex serviceAddRndvMutex;
 static std::map<OckRpcClient, Net_MemoryAllocator> g_memoryAllocator;
 static std::map<OckRpcClient, OckRpcMrInfo> g_memoryRegion;
+static int32_t g_timeoutTime = DEFAULT_TIMEOUT_TIME;
 
 static int Hcom4dbGetLibPath(char* rpcPath, uint32_t rpcPathLen)
 {
@@ -960,6 +962,16 @@ void OckRpcServerDestroy(OckRpcServer server)
     g_tlsFunc = TlsFuncs();
 }
 
+OckRpcServerContext OckRpcCloneCtx(OckRpcServerContext ctx)
+{
+    return Service_ContextClone(ctx);
+}
+
+void OckRpcDeCloneCtx(OckRpcServerContext ctx)
+{
+    Service_ContextDeClone(ctx);
+}
+
 void OckRpcServerCleanupCtx(OckRpcServerContext ctx)
 {
     return;
@@ -1813,8 +1825,16 @@ OckRpcStatus OckRpcClientCallRndvIov(
 
 void OckRpcClientSetTimeout(OckRpcClient client, int64_t timeout)
 {
-    Channel_SetOneSideTimeout(client, timeout);
-    Channel_SetTwoSideTimeout(client, timeout);
+    int32_t timeoutSeconds = 0;
+    if (timeout < 0) {
+        timeoutSeconds = timeout;
+    } else {
+        timeoutSeconds = static_cast<int32_t>(timeout / MILLOSECOND_PER_SECOND);
+    }
+    g_timeoutTime = timeoutSeconds;
+    Channel_SetOneSideTimeout(client, timeoutSeconds);
+    Channel_SetTwoSideTimeout(client, timeoutSeconds);
+    OCK_RPC_LOG_INFO("Set timeout " << timeoutSeconds << " s");
 }
 
 int OckRpcGetClient(OckRpcServerContext ctx, OckRpcClient *client)

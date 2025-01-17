@@ -592,6 +592,22 @@ int OckRpcGetClient(OckRpcServerContext ctx, OckRpcClient *client);
 int OckRpcGetRndvClient(OckRpcServerRndvContext ctx, OckRpcClient *client);
 
 /**
+ * @brief Clone service context
+ * 
+ * @param ctx       [in] context passed in by OckRpcMsgHandlerS
+ * 
+ * @return valid address of success, 0 if failed
+ */
+OckRpcServerContext OckRpcCloneCtx(OckRpcServerContext ctx);
+
+/**
+ * @brief destroy context by cloned
+ * 
+ * @param ctx       [in] context conled by OckRpcCloneCtx
+ */
+void OckRpcDeCloneCtx(OckRpcServerContext ctx);
+
+/**
  * @brief To compatible with interfaces of version RDMA ucx.
  * Deprecated in current version.
  */
