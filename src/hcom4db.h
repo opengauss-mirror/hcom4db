@@ -32,7 +32,7 @@ extern "C" {
 #endif
 
 /**
- * To compatible with interfaces of version RDMA ucx, 
+ * To compatible with interfaces of version RDMA ucx,
  * Deprecated in current version
  */
 typedef enum {
@@ -228,7 +228,7 @@ typedef void (*OckRpcTlsGetCert)(const char **certPath);
  * @brief The cert verify function
  * @param x509 the x509 object of CA
  * @param crlPath the crl file path
- * 
+ *
  * @return -1 for failed, and 1 for success
  */
 typedef int (*OckRpcTlsCertVerify)(void *x509, const char *crlPath);
@@ -507,24 +507,24 @@ OckRpcStatus OckRpcServerAddService(OckRpcServer server, OckRpcService *service)
 
 /**
  * @brief Add Rdnv service, must be enable OCK_RPC_CONFIG_USE_RNDV_SEND.
- * 
+ *
  * Register the message handling method to the server. When a message send by RNDV interface with this
  * ID is received, the registered message handler is called.
- * 
+ *
  * @param server    [in] server handle
  * @param service   [in] message processing object
- * 
+ *
  * @return OCK_RPC_OK for sucess and others for failure.
- * 
- * @note use the same id as servce has benne add will replace it 
+ *
+ * @note use the same id as servce has benne add will replace it
  */
 OckRpcStatus OckRpcServerAddRndvService(OckRpcServer server, OckRpcRndvService *service);
 
 /**
  * @brief Start the server.
- * 
+ *
  * This is not blocking routine, it will return after listening the binded address.
- * 
+ *
  * @param server    [in] server handle returned by @ref OckRpcServerCreate.
  *
  * @return OCK_RPC_OK for sucess and others for failure.
@@ -533,9 +533,9 @@ OckRpcStatus OckRpcServerStart(OckRpcServer server);
 
 /**
  * @brief Stop and destroy the server.
- * 
+ *
  * After this routine, the server handle can not be used again.
- * 
+ *
  * @param server    [in] server handle returned by @ref OckRpcServerCreate.
  */
 void OckRpcServerDestroy(OckRpcServer server);
@@ -945,8 +945,7 @@ typedef enum {
 /**
  * @brief Type of allocator
  */
-typedef enum
-{
+typedef enum {
     MEM_DYNAMIC_SIZE = 0,            /* allocate dynamic memory size, there is alignment with X KB */
     MEM_DYNAMIC_SIZE_WITH_CACHE = 1, /* allocator with dynamic memory size, with pre-allocate cache for performance */
 } OckRpcMemoryAllocatorType;
@@ -954,8 +953,7 @@ typedef enum
 /**
  * @brief Options for memory allocator
  */
-typedef struct
-{
+typedef struct {
     uintptr_t address;                                    /* base address if large range of memory for allocator */
     uint64_t size;                                        /* size of large memory chunk */
     uint32_t minBlockSize;                                /* min size of block, more than 4 KB is required */

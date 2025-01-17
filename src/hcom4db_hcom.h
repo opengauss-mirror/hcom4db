@@ -285,7 +285,7 @@ typedef struct {
     Service_Message msg[NET_SGE_MAX_IOV];
 } Service_RndvMessage;
 
-/** 
+/**
  * @brief rndv context type
  */
 typedef enum {
@@ -917,7 +917,7 @@ typedef struct {
 typedef struct {
     char name[NUM_96];          /* UDS name for listen or file path */
     uint16_t perm;              /* if 0 means not use file, otherwise use file an this perm as file perm */
-    uint16_t targetWorkerCount; /* the count of target workers, if >= 1, the accepted socket will be attached to sub set to workers, 0 means all*/
+    uint16_t targetWorkerCount; /* the count of target workers, if >= 1, the accepted socket will be attached to sub set to workers, 0 means all */
     uint16_t isCheck;           /* whether to verify the permission on the UDS file */
 } Service_OobUDSListenerOptions;
 
@@ -1305,8 +1305,7 @@ typedef enum {
 /**
  * @brief Type of allocator
  */
-typedef enum
-{
+typedef enum {
     C_DYNAMIC_SIZE = 0,            /* allocate dynamic memory size, there is alignment with X KB */
     C_DYNAMIC_SIZE_WITH_CACHE = 1, /* allocator with dynamic memory size, with pre-allocate cache for performance */
 } Net_MemoryAllocatorType;
@@ -1314,8 +1313,7 @@ typedef enum
 /**
  * @brief Options for memory allocator
  */
-typedef struct
-{
+typedef struct {
     uintptr_t address;                                    /* base address if large range of memory for allocator */
     uint64_t size;                                        /* size of large memory chunk */
     uint32_t minBlockSize;                                /* min size of block, more than 4 KB is required */
