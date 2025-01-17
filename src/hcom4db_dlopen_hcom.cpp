@@ -577,7 +577,7 @@ void FinishOckRpcDl(void)
         g_hcomDl = nullptr;
     }
 
-    if (memset_sp(&g_hcomFunc, sizeof(g_hcomFunc), 0 ,sizeof(g_hcomFunc)) != EOK) {
+    if (memset_sp(&g_hcomFunc, sizeof(g_hcomFunc), 0, sizeof(g_hcomFunc)) != EOK) {
         OCK_RPC_LOG_ERROR("memset_sp failed");
     }
 }
@@ -615,7 +615,7 @@ static int HcomDlsym(void)
     return OCK_RPC_OK;
 }
 
-int InitOckRpcDl(char *path, uint32_t pathLen)
+int InitOckRpcDl(char *path, unsigned int pathLen)
 {
     if (path == nullptr || pathLen == 0) {
         OCK_RPC_LOG_ERROR("Dlopen hcom path is nullptr");

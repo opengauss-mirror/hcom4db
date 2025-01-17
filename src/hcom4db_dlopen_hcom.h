@@ -33,10 +33,10 @@ extern "C" {
 
 /**
  * @brief Dlopen libhcom.so, regitser function of hcom4db_hcom.h
- * 
+ *
  * @param path      [in] the path of libhcom.so
  * @param pathLen   [in] the path len
- * 
+ *
  * @return 0 for success and -1 for failed
  */
 int InitOckRpcDl(char *path, unsigned int pathLen);

@@ -52,7 +52,7 @@ typedef uintptr_t Net_Service;
 
 /**
  * @brief Channel, represent multi connections(EPs) of one protocol
- * 
+ *
  * two side opreation, Net_ChannelSend
  * read operation from remote, Net_ChannelRead
  * write operation from remote, Net_ChannelWrite
@@ -94,7 +94,7 @@ typedef struct {
 
 typedef struct {
     Service_Request *iov; // sgl array
-    uint16_t iovCount;    // max count:NUM_16  
+    uint16_t iovCount;    // max count:NUM_16
 } __attribute__((packed)) Service_SglRequest;
 
 typedef struct {
@@ -130,7 +130,7 @@ typedef void (*Channel_CallbackFunc)(void *arg, Service_Context);
 
 /**
  * @brief RPC call completion handle.
- * 
+ *
  * This structure should be allocated by the user and can be passed to communication
  * primitives, such as Net_ChannelSend/Net_ChannelCall. When the structure object is passed
  * in, the communication routine changes to asynchrounous mode. And if the routine
@@ -155,66 +155,66 @@ typedef enum {
 
 /**
  * @brief Get the channel
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetChannel(Service_Context context, Net_Channel *channel);
 
 /**
  * @brief Get the context type
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetContextType(Service_Context context, Service_ContextType *type);
 
 /**
  * @brief Get the result
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetResult(Service_Context context, int *result);
 
 /**
  * @brief Get response context for send rsp message
- * 
+ *
  * @note only support SERVICE_RECEIVE/SERVICE_RECEIVE_RWA type invoke
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetRspCtx(Service_Context context, Service_RspCtx *rsp);
 
 /**
  * @brief Get op info by user input
- * 
+ *
  * @note only support SERVICE_SEND/SERVICE_RECEIVE type invoke
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetOpInfo(Service_Context context, Service_OpInfo *info);
 
 /**
- * @brief Get message data received which valid in callback lifetime 
- * 
+ * @brief Get message data received which valid in callback lifetime
+ *
  * @note Only support SERVICE_RECEIVE/SERVICE_RECEIVE_RWA type invoke
  * @note If user want to use message in other thread, need to copy data
- * 
+ *
  * @return valid address if success, NULL if failed
  */
 void *Service_GetMessageData(Service_Context context);
 
 /**
- * @brief Get message data len received which valid in callback lifetime 
- * 
+ * @brief Get message data len received which valid in callback lifetime
+ *
  * @note Only support SERVICE_RECEIVE/SERVICE_RECEIVE_RWA type invoke
  * @note If user want to use message in other thread, need to copy data
- * 
+ *
  * @return valid length if success, 0 if failed
  */
 uint32_t Service_GetMessageDataLen(Service_Context context);
 
 /**
  * @brief Clone service context
- * 
+ *
  * @return valid address if success, 0 if failed
  */
 Service_Context Service_ContextClone(Service_Context context);
@@ -227,30 +227,30 @@ void Service_ContextDeClone(Service_Context context);
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param context       [in] service context
  * @param opInfo        [in] get opInfo from Service_GetOpInfo
  * @param message       [in] user single common message
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
  * @note return ERROR, cb will not be invoked.
  */
 int Service_ContextReply(Service_Context context, Service_OpInfo *opInfo, Service_Message *message,
-    Channel_Callback *cb);
+                         Channel_Callback *cb);
 
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param context       [in] service context
  * @param message       [in] user single common message
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
@@ -261,13 +261,13 @@ int Service_ContextReplyRaw(Service_Context context, Service_Message *message, C
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param context       [in] service context
  * @param message       [in] send to remote message which fill with local different MRs, send to the same remote MR by
  * loacal MRs sequence, you can free it after called, rKey/rAddress do not need to assign.
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
@@ -296,90 +296,89 @@ typedef enum {
 
 /**
  * @brief Get the channel
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetRndvChannel(Service_RndvContext context, Net_Channel *channel);
 
 /**
  * @brief Get the context type
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetRndvCtxType(Service_RndvContext context, Service_RndvType *type);
 
 /**
  * @brief Get op info by user input
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetRndvOpInfo(Service_RndvContext context, Service_OpInfo *info);
 
 /**
- * @brief Get message data received which valid in callback lifetime 
- * 
+ * @brief Get message data received which valid in callback lifetime
+ *
  * @note If user want to use message in other thread, need to copy data
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_GetRndvMessage(Service_Context context, Service_RndvMessage *message);
 
 /**
  * @brief Free rndv context
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Service_RndvFreeContext(Service_RndvContext context);
 
 /**
  * @brief Reply message with op info to peer rndv msg
- * 
+ *
  * @param context       [in] service context
  * @param opInfo        [in] get opInfo from Service_GetOpInfo
  * @param message       [in] user single common message
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
  * @note return ERROR, cb will not be invoked.
  */
 int Service_RndvReply(Service_RndvContext context, Service_OpInfo *opInfo, Service_Message *message,
-    Channel_Callback *cb);
-
+                      Channel_Callback *cb);
 
 /**
  * @brief Set channel up context
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Channel_SetUpCtx(Net_Channel channel, uint64_t ctx);
 
 /**
  * @brief Get channel up context
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Channel_GetUpCtx(Net_Channel channel, uint64_t *ctx);
 
 /**
  * @brief Get channel type index
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Channel_GetTypeIndex(Net_Channel channel, uint16_t *index);
 
 /**
  * @brief Get channel callback type
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Channel_GetCBType(Net_Channel channel, Channel_CBType *type);
 
 /**
  * @brief Get channel peer ip and port
- * 
+ *
  * @return 0 means OK, other value means failed
  */
 int Channel_GetPeerIpPort(Net_Channel channel, char **ip, uint16_t *port);
@@ -387,13 +386,13 @@ int Channel_GetPeerIpPort(Net_Channel channel, char **ip, uint16_t *port);
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param opInfo        [in] get opInfo from Service_GetOpInfo
  * @param message       [in] user single common message
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
@@ -401,35 +400,34 @@ int Channel_GetPeerIpPort(Net_Channel channel, char **ip, uint16_t *port);
  */
 int Channel_PostSend(Net_Channel channel, Service_OpInfo *opInfo, Service_Message *message, Channel_Callback *cb);
 
-
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param rspCtx        [in] get rspCtx from Service_GetRspCtx
  * @param opInfo        [in] get opInfo from Service_GetOpInfo
  * @param message       [in] user single common message
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
  * @note return ERROR, cb will not be invoked.
  */
 int Channel_PostResponse(Net_Channel channel, Service_RspCtx rspCtx, Service_OpInfo *opInfo, Service_Message *message,
-    Channel_Callback *cb);
+                         Channel_Callback *cb);
 
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param message       [in] user single common message
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
@@ -440,13 +438,13 @@ int Channel_PostSendRaw(Net_Channel channel, Service_Message *message, Channel_C
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param rspCtx        [in] get rspCtx from Service_GetRspCtx
  * @param message       [in] user single common message
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
@@ -457,13 +455,13 @@ int Channel_PostResponseRaw(Net_Channel channel, Service_RspCtx rspCtx, Service_
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param message       [in] send to remote message which fill with local different MRs, send to the same remote MR by
  * loacal MRs sequence, you can free it after called, rKey/rAddress do not need to assign.
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
@@ -474,26 +472,26 @@ int Channel_PostSendRawSgl(Net_Channel channel, Service_SglRequest *message, Cha
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param rspCtx        [in] get rspCtx from Service_GetRspCtx
  * @param message       [in] send to remote message which fill with local different MRs, send to the same remote MR by
  * loacal MRs sequence, you can free it after called, rKey/rAddress do not need to assign.
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the inerface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker therad.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in process.
  *
  * @note return ERROR, cb will not be invoked.
  */
 int Channel_PostResponseRawSgl(Net_Channel channel, Service_RspCtx rspCtx, Service_SglRequest *message,
-    Channel_Callback *cb);
+                               Channel_Callback *cb);
 
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param reqInfo       [in] peer can get opInfo from Service_GetOpInfo
  * @param req           [in] send to remote message.
@@ -502,22 +500,22 @@ int Channel_PostResponseRawSgl(Net_Channel channel, Service_RspCtx rspCtx, Servi
  * response. If user does not know the real length of response, user can set @b response->data to null, so
  * RPC will allocate enough memory to hold the response, and store the memory address to @b reponse->data. User are
  * required to use free() to release this memory. There will be additional overhead.
- * 
+ *
  * @return 0 means OK, other value means failed.
  */
 int Channel_SyncCall(Net_Channel channel, Service_OpInfo *reqInfo, Service_Message *req, Service_OpInfo *rspInfo,
-    Service_Message *rsp);
+                     Service_Message *rsp);
 
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param opInfo        [in] get opInfo from Service_GetOpInfo
  * @param message       [in] send to remote message.
  * @param cb            [in] receive message will store in NetServiceContext::Message() in callback lifetime. If
  * user want to use Message() in other thread, need to prepare buff and copy data out.
- * 
+ *
  * @return 0 means the operation is in progress, cb will be invoked.
  *
  * @note return ERROR, cb will not be invoked.
@@ -527,14 +525,14 @@ int Channel_AsyncCall(Net_Channel channel, Service_OpInfo *opInfo, Service_Messa
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param req           [in] send to remote message.
  * @param rsp           [in] receive remote response message. If @b response is not null, it will receive a
  * response. If user does not know the real length of response, user can set @b response->data to null, so
  * RPC will allocate enough memory to hold the response, and store the memory address to @b reponse->data. User are
  * required to use free() to release this memory. There will be additional overhead.
- * 
+ *
  * @return 0 means OK, other value means failed.
  */
 int Channel_SyncCallRaw(Net_Channel channel, Service_Message *req, Service_Message *rsp);
@@ -542,12 +540,12 @@ int Channel_SyncCallRaw(Net_Channel channel, Service_Message *req, Service_Messa
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param message       [in] send to remote message.
  * @param cb            [in] receive message will store in NetServiceContext::Message() in callback lifetime. If
  * user want to use Message() in other thread, need to prepare buff and copy data out.
- * 
+ *
  * @return 0 means the operation is in progress, cb will be invoked.
  *
  * @note return ERROR, cb will not be invoked.
@@ -557,7 +555,7 @@ int Channel_AsyncCallRaw(Net_Channel channel, Service_Message *req, Channel_Call
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param req           [in] send to remote message which fill with local different MRs, send to the same remote MR by
  * loacal MRs sequence, you can free it after called, rKey/rAddress do not need to assign.
@@ -565,7 +563,7 @@ int Channel_AsyncCallRaw(Net_Channel channel, Service_Message *req, Channel_Call
  * response. If user does not know the real length of response, user can set @b response->data to null, so
  * RPC will allocate enough memory to hold the response, and store the memory address to @b reponse->data. User are
  * required to use free() to release this memory. There will be additional overhead.
- * 
+ *
  * @return 0 means OK, other value means failed.
  */
 int Channel_SyncCallRawSgl(Net_Channel channel, Service_SglRequest *req, Service_Message *rsp);
@@ -573,13 +571,13 @@ int Channel_SyncCallRawSgl(Net_Channel channel, Service_SglRequest *req, Service
 /**
  * @brief Post send reponse message with op info to peer, and without waiting for response. Peer will be trigger
  * new request NetCallback also with op info
- * 
+ *
  * @param channel       [in] net channel
  * @param message       [in] end to remote message which fill with local different MRs, send to the same remote MR by
  * loacal MRs sequence, you can free it after called, rKey/rAddress do not need to assign.
  * @param cb            [in] receive message will store in NetServiceContext::Message() in callback lifetime. If
  * user want to use Message() in other thread, need to prepare buff and copy data out.
- * 
+ *
  * @return 0 means the operation is in progress, cb will be invoked.
  *
  * @note return ERROR, cb will not be invoked.
@@ -590,7 +588,7 @@ int Channel_AsyncCallRawSgl(Net_Channel channel, Service_SglRequest *req, Channe
  * @brief Post send a register MR with op info to peer, and waiting for response. Peer will be trigger new
  * request NetCallbcak also with op info. Poll mode:worker poll(default mode, support sync/async with sem), self
  * poll(support sync only)
- * 
+ *
  * @param channel       [in] net channel
  * @param reqInfo       [in] peer can get opInfo from Service_GetOpInfo
  * @param req           [in] send local MR to remote for data message. rKey/rAddress do not need to assign
@@ -599,28 +597,28 @@ int Channel_AsyncCallRawSgl(Net_Channel channel, Service_SglRequest *req, Channe
  * response. If user does not know the real length of response, user can set @b response->data to null, so
  * RPC will allocate enough memory to hold the response, and store the memory address to @b reponse->data. User are
  * required to use free() to release this memory. There will be additional overhead.
- * 
+ *
  * @return 0 means OK, other value means failed.
- * 
+ *
  * @note Peer rsp message need invoke Send() with Service_OpInfo
  */
 int Channel_SyncRndvCall(Net_Channel channel, Service_OpInfo *reqInfo, Service_Request *req, Service_OpInfo *rspInfo,
-    Service_Message *rsp);
+                         Service_Message *rsp);
 
 /**
  * @brief Post send a register MR with op info to peer, and waiting for response. Peer will be trigger new
  * request NetCallbcak also with op info. Poll mode:worker poll(default mode, support sync/async with sem), self
  * poll(support sync only)
- * 
+ *
  * @param channel       [in] net channel
  * @param reqInfo       [in] peer can get opInfo from Service_GetOpInfo
  * @param req           [in] send local MR to remote for data message. rKey/rAddress do not need to assign
  * @param cb            [in] receive message will store in NetServiceContext::Message() in callback lifetime. If
  * user want to use Message() in other thread, need to prepare buff and copy data out.
- * 
+ *
  * @return 0 means the operation is in process, cb will be invoked.
  * Return ERROR, cb will not be invoked.
- * 
+ *
  * @note Peer rsp message need invoke Send() with Service_OpInfo
  */
 int Channel_AsyncRndvCall(Net_Channel channel, Service_OpInfo *reqInfo, Service_Request *req, Channel_Callback *cb);
@@ -629,7 +627,7 @@ int Channel_AsyncRndvCall(Net_Channel channel, Service_OpInfo *reqInfo, Service_
  * @brief Post send a register MR with op info to peer, and waiting for response. Peer will be trigger new
  * request NetCallbcak also with op info. Poll mode:worker poll(default mode, support sync/async with sem), self
  * poll(support sync only)
- * 
+ *
  * @param channel       [in] net channel
  * @param reqInfo       [in] peer can get opInfo from Service_GetOpInfo
  * @param req           [in] send local MR to remote for data message. rKey/rAddress do not need to assign
@@ -638,43 +636,42 @@ int Channel_AsyncRndvCall(Net_Channel channel, Service_OpInfo *reqInfo, Service_
  * response. If user does not know the real length of response, user can set @b response->data to null, so
  * RPC will allocate enough memory to hold the response, and store the memory address to @b reponse->data. User are
  * required to use free() to release this memory. There will be additional overhead.
- * 
+ *
  * @return 0 means OK, other value means failed.
- * 
+ *
  * @note Peer rsp message need invoke Send() with Service_OpInfo
  */
 int Channel_SyncRndvSglCall(Net_Channel channel, Service_OpInfo *reqInfo, Service_SglRequest *req,
-    Service_OpInfo *rspInfo, Service_Message *rsp);
+                            Service_OpInfo *rspInfo, Service_Message *rsp);
 
 /**
  * @brief Post send a register MR with op info to peer, and waiting for response. Peer will be trigger new
  * request NetCallbcak also with op info. Poll mode:worker poll(default mode, support sync/async with sem), self
  * poll(support sync only)
- * 
+ *
  * @param channel       [in] net channel
  * @param reqInfo       [in] peer can get opInfo from Service_GetOpInfo
  * @param req           [in] send local MR to remote for data message. rKey/rAddress do not need to assign
  * @param cb            [in] receive message will store in NetServiceContext::Message() in callback lifetime. If
  * user want to use Message() in other thread, need to prepare buff and copy data out.
- * 
+ *
  * @return 0 means the operation is in process, cb will be invoked.
  * Return ERROR, cb will not be invoked.
- * 
+ *
  * @note Peer rsp message need invoke Send() with Service_OpInfo
  */
 int Channel_AsyncRndvSglCall(Net_Channel channel, Service_OpInfo *reqInfo, Service_SglRequest *req,
-    Channel_Callback *cb);
-
+                             Channel_Callback *cb);
 
 /**
  * @brief Post a single side read request to peer, no NetCallback at peer will be triggered
- * 
+ *
  * @param channel       [in] net channel
  * @param req           [in] request infomation, include 5 important varibles, local/remote address/key and size.
  * You can free it after called NetServiceOneSideDoneHandler.
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the interface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker thread.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in progress.
  * Return ERROR, cb will not be invoked.
@@ -683,13 +680,13 @@ int Channel_Read(Net_Channel channel, Service_Request *req, Channel_Callback *cb
 
 /**
  * @brief Post multi single side read request to peer, no NetCallback at peer will be triggered
- * 
+ *
  * @param channel       [in] net channel
  * @param req           [in] request infomation, fill with local different MRs, send to the same remote MR by local
  * MRs sequence, you can free it after called NetServiceOneSideDoneHandler. rKey/rAddress do not need to assign.
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the interface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker thread.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in progress.
  * Return ERROR, cb will not be invoked.
@@ -698,13 +695,13 @@ int Channel_ReadSgl(Net_Channel channel, Service_SglRequest *req, Channel_Callba
 
 /**
  * @brief Post a single side write request to peer, no NetCallback at peer will be triggered
- * 
+ *
  * @param channel       [in] net channel
  * @param req           [in] request infomation, include 5 important varibles, local/remote address/key and size.
  * You can free it after called NetServiceOneSideDoneHandler.
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the interface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker thread.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in progress.
  * Return ERROR, cb will not be invoked.
@@ -713,13 +710,13 @@ int Channel_Write(Net_Channel channel, Service_Request *req, Channel_Callback *c
 
 /**
  * @brief Post multi single side write request to peer, no NetCallback at peer will be triggered
- * 
+ *
  * @param channel       [in] net channel
  * @param req           [in] request infomation, fill with local different MRs, send to the same remote MR by local
  * MRs sequence, you can free it after called NetServiceOneSideDoneHandler. rKey/rAddress do not need to assign.
  * @param cb            [in] NetCallback for async send to peer. If cb is nullptr, the interface will block until
  * complete. And it means if set cb is nullptr in worker callback context, the interface will block worker thread.
- * 
+ *
  * @return 0 if cb is null, it means the operation is cb successfully. Otherwise, it means the operation
  * is in progress.
  * Return ERROR, cb will not be invoked.
@@ -733,12 +730,12 @@ void Channel_Close(Net_Channel channel);
 
 /**
  * @brief Set the timeout if the one side operation, include read/readSgl/write/writeSgl
- * 
+ *
  * 1. timeout = 0: return immediately
  * 2. timeout < 0: never timeout, usually set to -1
  * 3. timeout > 0: Millisecond precision timeout.
  * Default timeout is -1.
- * 
+ *
  * @param channel   [in] net channel.
  * @param timeout   [in] timeout in seconds.
  */
@@ -746,29 +743,29 @@ void Channel_SetOneSideTimeout(Net_Channel channel, int32_t timeout);
 
 /**
  * @brief Set the timeout if the one side operation, include send/sendRaw/sendRawSgl/SyncCall/AsyncCall...etc
- * 
+ *
  * 1. timeout = 0: return immediately
  * 2. timeout < 0: never timeout, usually set to -1
  * 3. timeout > 0: Millisecond precision timeout.
  * Default timeout is -1.
- * 
+ *
  * @param channel   [in] net channel.
  * @param timeout   [in] timeout in seconds.
  */
 void Channel_SetTwoSideTimeout(Net_Channel channel, int32_t timeout);
 
 typedef enum {
-    HIGH_LEVEL_BLOCK,   /* spin-wait by busy loop */
-    LOW_LEVEL_BLOCK,    /* full sleep */
+    HIGH_LEVEL_BLOCK, /* spin-wait by busy loop */
+    LOW_LEVEL_BLOCK,  /* full sleep */
 } Channel_FlowCtrlLevel;
 
 /**
  * @brief Flow control configuration item
  */
 typedef struct {
-    Channel_FlowCtrlLevel level;    /* block level by different action */
-    uint16_t intervalTimeMs;        /* interval time ms, range in [1, 1000] */
-    uint64_t thresholdBytes;        /* threshold byte */
+    Channel_FlowCtrlLevel level; /* block level by different action */
+    uint16_t intervalTimeMs;     /* interval time ms, range in [1, 1000] */
+    uint64_t thresholdBytes;     /* threshold byte */
 } Channel_FlowCtrlOptions;
 
 /**
@@ -778,7 +775,7 @@ int Channel_ConfigFlowControl(Net_Channel channel, Channel_FlowCtrlOptions optio
 
 /**
  * @brief External log callback function
- * 
+ *
  * @param level     [in] level, 0/1/2/3 represent debug/info/warn/error
  * @param msg       [in] message, log message with name:code-line-number
  */
@@ -786,7 +783,7 @@ typedef void (*Service_LogHandler)(int level, const char *msg);
 
 /**
  * @brief Set external logger function
- * 
+ *
  * @param h         [in] the log function ptr
  */
 void Service_SetExternalLogger(Service_LogHandler h);
@@ -948,12 +945,12 @@ typedef int (*Service_ChannelHandler)(Net_Channel channel, uint64_t usrCtx, cons
 
 /**
  * @brief Callback function definition
- * 
+ *
  * it is called when the following cases happen
  * 1) post send cb
  * 2) read cb
  * 3) write cb
- * 
+ *
  * @note
  * 1) ctx is a thread local static variable.
  * 2) msgData need to copy to another space properly
@@ -965,7 +962,7 @@ typedef int (*Service_RequestHandler)(Service_Context ctx, uint64_t usrCtx);
 
 /**
  * @brief Idle callback function, when worker thread idle, this function will be called
- * 
+ *
  * @param wkrGrpIdx         [in] worker group index in on net driver
  * @param idxInGrp          [in] worker index in the group
  * @param usrCtx            [in] user context
@@ -1013,19 +1010,19 @@ typedef enum {
 
 /**
  * @brief Create a service
- * 
+ *
  * @param t                 [in] type of service
  * @param name              [in] the name of service
  * @param startOobSvr       [in] 0 or 1, 1 to start Oob server, 0 don't start Oob server
  * @param service           [out] created service address
- * 
+ *
  * @return 0, if created successfully
  */
 int Service_Create(Service_Type t, const char *name, uint8_t startOobSvr, Net_Service *service);
 
 /**
  * @brief Set out of bound ip and port
- * 
+ *
  * @param service           [in] created service address
  * @param ip                [in] ip address
  * @param port              [out] port
@@ -1034,7 +1031,7 @@ void Service_SetOobIpAndPort(Net_Service service, const char *ip, uint16_t port)
 
 /**
  * @brief Set out of bound ip adn port
- * 
+ *
  * @param service           [in] the address of driver
  * @param ipArray           [out] oob ip list
  * @param port              [out] oob port list
@@ -1044,51 +1041,51 @@ bool Service_GetOobIpAndPort(Net_Service service, char ***ipArray, uint16_t **po
 
 /**
  * @brief Start the driver, start oob accept thread (server only) and RDMA polling thread
- * 
+ *
  * @param service           [in] the address of service
  * @param options           [in] the options of the service
- * 
+ *
  * @return 0 if successful
  */
 int Service_Start(Net_Service service, Service_Options options);
 
 /**
  * @brief Stop the service
- * 
+ *
  * @param service           [in] the address of service
  */
 void Service_Stop(Net_Service service);
 
 /**
  * @brief Destroy the service
- * 
+ *
  * @param service           [in] the address of service
- * 
+ *
  * @return 0 if destroy successful
  */
 int Service_Destroy(Net_Service service);
 
 /**
  * @brief Connect to server
- * 
+ *
  * @param service           [in] the address of service
  * @param oobIpOrName       [in] oob ip or name to connect, set ip for tcp and name for uds
  * @param oobPort           [in] only need to set when tcp oob
  * @param payload           [in] payload transfered to peer, will be got EP Connected Callback at server
  * @param channel           [out] connected channel
  * @param options           [in] variable argument for specific use
- * 
+ *
  * @return 0 successful
  */
 int Service_Connect(Net_Service service, const char *oobIpOrName, uint16_t oobPort, const char *payload,
-    Net_Channel *channel, Service_ConnectOpt *options);
+                    Net_Channel *channel, Service_ConnectOpt *options);
 
 /**
  * @brief Reconnect to server, recover channel
- * 
+ *
  * @param service           [in] the address if service
  * @param channel           [in] connected channel
- * 
+ *
  * @return 0 successful
  */
 int Service_Reconnect(Net_Service service, Net_Channel channel);
@@ -1096,61 +1093,61 @@ int Service_Reconnect(Net_Service service, Net_Channel channel);
 /**
  * @brief Increase the internal reference count, need to call this when forwading the context to another thread to
  * process
- * 
+ *
  * @param channel           [in] the address of channel
  */
 void Channel_Refer(Net_Channel channel);
 
 /**
  * @brief DeRefer the internal reference count
- * 
+ *
  * @param channel           [in] the address of channel
  */
 void Channel_DeRefer(Net_Channel channel);
 
 /**
  * @brief Destroy the channel
- * 
+ *
  * @param channel           [in] the address of channel
  */
 void Channel_Destroy(Net_Channel channel);
 
 /**
  * @brief Register a memory region, the memory will allocated internally
- * 
+ *
  * @param service           [in] the address of service
  * @param size              [in] size of the meory region
  * @param mr                [out] memory region registered
- * 
+ *
  * @return 0 successful
  */
 int Service_RegisterMemoryRegion(Net_Service service, uint64_t size, Service_MemoryRegion *mr);
 
 /**
  * @brief Register a memory region, the memory need to passed in
- * 
+ *
  * @param service   [in] the address of server
  * @param address   [in] memory pointer that needs to be registered
  * @param size      [in] size of memory region
  * @param mr        [out] memory region regitstered to network card
- * 
- * @return 0 for sucess and others for failure. 
+ *
+ * @return 0 for sucess and others for failure.
  */
 int Service_RegisterAssignMemoryRegion(Net_Service service, uintptr_t address, uint64_t size, Service_MemoryRegion *mr);
 
 /**
  * @brief Parse the memory region, get info
- * 
+ *
  * @param mr        [in] memory region registered
  * @param info      [in] memory region info
- * 
+ *
  * @return 0 for sucess and others for failure.
  */
 int Service_GetMemoryRegionInfo(Service_MemoryRegion mr, Service_MemoryRegionInfo *info);
 
 /**
  * @brief Unregister the memory region
- * 
+ *
  * @param service   [in] the address of server
  * @param mr        [in] memory region registered
  */
@@ -1158,67 +1155,67 @@ void Service_DestroyMemoryRegion(Net_Service service, Service_MemoryRegion mr);
 
 /**
  * @brief Register callback function for channel
- * 
+ *
  * @param service       [in] the address of service
  * @param t             [in] handle type, could be C_CHANNEL_NET or C_CHANNEL_BROKEN
  * @param h             [in] callback function address
- * 
+ *
  * @return an inner handler address, for un-register in case of memory leak. Return 0 means failed
  */
 uintptr_t Service_RegisterChannelHandler(Net_Service service, Service_HandlerType t, Service_ChannelHandler h,
-    Service_ChannelPolicy policy, uint64_t usrCtx);
+                                         Service_ChannelPolicy policy, uint64_t usrCtx);
 
 /**
  * @brief Register callback function for channel operation
- * 
+ *
  * @param service       [in] the address of service
  * @param i             [in] channel type index, range [0, 15]
  * @param t             [in] handle type, could be C_SERVICE_REQUEST_RECEIVED or C_SERVICE_REQUEST_POSTED or
  * C_SERVICE_READWRITE_DONE
  * @param h             [in] callback function address
- * 
+ *
  * @return an inner handler address, for un-register in case of memory leak. Return 0 means failed
  */
 uintptr_t Service_RegisterOpHandler(Net_Service service, uint16_t i, Service_OpHandlerType t, Service_RequestHandler h,
-    uint64_t usrCtx);
+                                    uint64_t usrCtx);
 
 /**
  * @brief Register callback function for worker idle
- * 
+ *
  * @param service       [in] the address of service
  * @param h             [in] handler
  * @param usrCtx        [in] user context, passed to callback function
- * 
+ *
  * @return an inner handler address, for un-register in case of memory leak. Return 0 means failed
  */
 uintptr_t Service_RegisterIdleHandler(Net_Service service, Service_IdleHandler h, uint64_t usrCtx);
 
 /**
  * @brief Register callback function for rndv memory allocate
- * 
+ *
  * @param service       [in] the address of service
  * @param t             [in] handler
- * 
+ *
  * @return an inner handler address, for un-register in case of memory leak. Return 0 means failed
  */
 uintptr_t Service_RegisterAllocateHandler(Net_Service service, Service_RndvMemAllocate h);
 
 /**
  * @brief Register callback function for rndv memory free
- * 
+ *
  * @param service       [in] the address of service
  * @param t             [in] handler
- * 
+ *
  * @return an inner handler address, for un-register in case of memory leak. Return 0 means failed
  */
 uintptr_t Service_RegisterFreeHandler(Net_Service service, Service_RndvMemFree h);
 
 /**
  * @brief Register callback function for rndv op handler
- * 
+ *
  * @param service       [in] the address of service
  * @param t             [in] handler
- * 
+ *
  * @return an inner handler address, for un-register in case of memory leak. Return 0 means failed
  */
 uintptr_t Service_RegisterRndvOpHandler(Net_Service service, Service_RndvHandler h);
@@ -1240,17 +1237,17 @@ typedef void (*Net_TlsKeyPassErase)(char *keyPass, int len);
 
 /**
  * @brief The cert verify function
- * 
+ *
  * @param x509          [in] the x509 object of CA
  * @param crlPath       [in] the crl file path
- * 
+ *
  * @return -1 for failed, and 1 for success
  */
 typedef int (*Net_TlsCertVerify)(void *x509, const char *crlPath);
 
 /**
  * @brief Get the certificate file of public key
- * 
+ *
  * @param name          [out] name
  * @param certPath      [out] the path of certificate
  */
@@ -1274,24 +1271,24 @@ typedef int (*Net_TlsGetPrivateKeyCb)(const char *name, char **priKeyPath, char 
  * @param verify        [out] the verify function, only effect in VERIFY_BY_CUSTOM_FUNC mode
  */
 typedef int (*Net_TlsGetCACb)(const char *name, char **caPath, char **crlPath, Net_PeerCertVerifyType *verifyType,
-    Net_TlsCertVerify *verify);
+                              Net_TlsCertVerify *verify);
 
 /**
  * @brief Register callback function for tls enable
- * 
+ *
  * @param service       [in] the address if driver
  * @param certCb        [in] callback to get cert
  * @param priKeyCb      [in] callback to get private key
  * @param caCb          [in] callback to get ca
- * 
+ *
  * @return an inner handler address, for un-register in case of memory leak
  */
 uintptr_t Service_RegisterTLSCb(Net_Service service, Net_TlsGetCertCb certCb, Net_TlsGetPrivateKeyCb priKeyCb,
-    Net_TlsGetCACb caCb);
+                                Net_TlsGetCACb caCb);
 
 /**
  * @brief External log callback function
- * 
+ *
  * @param level         [in] level, 0/1/2/3 represent debug/info/warn/error
  * @param msg           [in] message, log message wit name:code-line-number
  */
@@ -1378,39 +1375,39 @@ int Net_MemoryAllocatorMemOffset(Net_MemoryAllocator allocator, uintptr_t addres
 
 /**
  * @brief Get free memory size in alloctor memory
- * 
+ *
  * @param allocator     [in] memory allocator created by Net_MemoryAllocatorCreate
  * @param size          [out] free memory size
- * 
+ *
  * @return 0 for sucess and others for failure.
  */
 int Net_MemoryAllocatorFreeSize(Net_MemoryAllocator allocator, uintptr_t *size);
 
 /**
  * @brief Allocate memory area
- * 
+ *
  * @param alloactor     [in] memory allocator created by Net_MemoryAllocatorCreate
  * @param size          [in] memory size user needs
  * @param address       [out] allocaoted memory address
  * @param key           [out] memory region key set by Net_MemoryAllocatorSetMrKey
- * 
+ *
  * @return 0 for sucess and others for failure.
  */
 int Net_MemoryAllocatorAllocate(Net_MemoryAllocator allocator, uint64_t size, uintptr_t *address, uint32_t *key);
 
 /**
  * @brief Free memory area
- * 
+ *
  * @param alloactor     [in] memory allocator created by Net_MemoryAllocatorCreate
  * @param address       [in] memory address to free, allocated by Net_MemoryAllocatorAllocate
- * 
+ *
  * @return 0 for sucess and others for failure.
  */
 int Net_MemoryAllocatorFree(Net_MemoryAllocator allocator, uintptr_t address);
 
 /**
  * @brief Set external logger function
- * 
+ *
  * @param h             [in] the log function ptr
  */
 void Net_SetExternalLogger(Net_LogHandler h);

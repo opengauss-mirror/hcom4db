@@ -31,9 +31,8 @@
 #endif
 extern "C" {
 #endif
-#endif
 
-namespace hcom4dbDefine{
+namespace hcom4dbDefine {
 using TlsFuncs = struct TlsFunc {
     OckRpcTlsGetCAAndVerify getCaAndVerify; /* get the CA path and verify callback */
     OckRpcTlsGetCert getCert;               /* get the certifycate file of public key */
@@ -64,6 +63,7 @@ using OckRpcMrInfo = struct OckRpcMrInfo {
 #ifdef __cplusplus
 #if __cplusplus
 }
+#endif
 #endif
 
 #endif
