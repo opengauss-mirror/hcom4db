@@ -1,39 +1,67 @@
 # HCOM4DB
 
-#### 介绍
-{**以下是 Gitee 平台说明，您可以替换此简介**
-Gitee 是 OSCHINA 推出的基于 Git 的代码托管平台（同时支持 SVN）。专为开发者提供稳定、高效、安全的云端软件开发协作平台
-无论是个人、团队、或是企业，都能够用 Gitee 实现代码托管、项目管理、协作开发。企业项目请看 [https://gitee.com/enterprises](https://gitee.com/enterprises)}
+HCOM4DB(Hyper Communication Library for Database)是基于华为公司开发HCOM通信组件，面向数据库场景开发的高性能、高可用的通信组件。
+CBB等组件使用RDMA等通信协议依赖的函数模块。
 
-#### 软件架构
-软件架构说明
+#### 一、工程说明
+1、编程语言：C/C++
 
+2、编译工具：cmake
 
-#### 安装教程
+3、目录说明：
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+hcom4db：主目录，CMakeLists.txt为主工程入口；
 
-#### 使用说明
+src: 源代码目录；
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+build：工程构建脚本目录。
+#### 二、编译指导
+1、操作系统和软件依赖要求
 
-#### 参与贡献
+支持以下操作系统：
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
+CentOS 7.6（x86）
 
+openEuler-20.03-LTS
 
-#### 特技
+openEuler-22.03-LTS
 
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+openEuler-24.03-LTS
+
+适配其他系统，可参照openGauss数据库编译指导
+
+2、下载HCOM4DB
+
+可以从openGauss开源社区下载HCOM4DB。
+
+3、代码编译
+
+使用hcom4db/build/linux/opengauss/build.sh编译代码, 参数说明请见以下表格。
+<table>
+    <tr>
+        <th>选项</th>
+        <th>参数</th>
+        <th>说明</th>
+    </tr>
+    <tr>
+        <th>-3rd</th>
+        <th>[binarylibs path]</th>
+        <th>指定binarylibs路径。该路径必须是绝对路径</th>
+    </tr>
+    <tr>
+        <th>-m</th>
+        <th>[version_mode]</th>
+        <th>编译目标版本，Debug或者Release。默认Release</th>
+    </tr>
+    <tr>
+        <th>-t</th>
+        <th>[build_tool]</th>
+        <th>指定编译工具，默认cmake</th>
+    </tr>
+</table>
+
+现在只需使用如下命令即可编译：
+
+[user@linux]$ sh build.sh -3rd [binarylibs path] -m Release -t cmake
+
+完成编译后，动态库生成在hcom4db/output/lib目录中
