@@ -1342,7 +1342,7 @@ OckRpcStatus OckRpcClientCall(
     int32_t ret = 0;
     Service_OpInfo reqOpInfo = Service_OpInfo();
     reqOpInfo.opCode = msgId;
-    reqOpInfo.timeout = DEFAULT_TIMEOUT_TIME;
+    reqOpInfo.timeout = g_timeoutTime;
     Service_Message req = {.data = request->data, .size = static_cast<uint32_t>(request->len)};
 
     if (done == nullptr) {
@@ -1710,7 +1710,7 @@ OckRpcStatus OckRpcClientCallRndv(
     int32_t ret = 0;
     Service_OpInfo reqOpInfo = Service_OpInfo();
     reqOpInfo.opCode = msgId;
-    reqOpInfo.timeout = DEFAULT_TIMEOUT_TIME;
+    reqOpInfo.timeout = g_timeoutTime;
 
     Service_Request req = Service_Request();
     req.lAddress = request->lAddress;
@@ -1832,9 +1832,9 @@ void OckRpcClientSetTimeout(OckRpcClient client, int64_t timeout)
         timeoutSeconds = static_cast<int32_t>(timeout / MILLOSECOND_PER_SECOND);
     }
     g_timeoutTime = timeoutSeconds;
-    Channel_SetOneSideTimeout(client, timeoutSeconds);
-    Channel_SetTwoSideTimeout(client, timeoutSeconds);
-    OCK_RPC_LOG_INFO("Set timeout " << timeoutSeconds << " s");
+    Channel_SetOneSideTimeout(client, g_timeoutTime);
+    Channel_SetTwoSideTimeout(client, g_timeoutTime);
+    OCK_RPC_LOG_INFO("Set timeout " << g_timeoutTime << " s");
 }
 
 int OckRpcGetClient(OckRpcServerContext ctx, OckRpcClient *client)
