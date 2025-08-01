@@ -116,11 +116,9 @@ export HCOM4DB_LIBRARYS=$(pwd)/../../../library
 [ -d "${HCOM4DB_LIBRARYS}/huawei_security" ] && rm -rf ${HCOM4DB_LIBRARYS}/huawei_security
 [ -d "${HCOM4DB_LIBRARYS}/openssl" ] && rm -rf ${HCOM4DB_LIBRARYS}/openssl
 [ -d "${HCOM4DB_LIBRARYS}/zlib" ] && rm -rf ${HCOM4DB_LIBRARYS}/zlib
-[ -d "${HCOM4DB_LIBRARYS}/lz4" ] && rm -rf ${HCOM4DB_LIBRARYS}/lz4
 mkdir -p $HCOM4DB_LIBRARYS/huawei_security
 mkdir -p $HCOM4DB_LIBRARYS/openssl
 mkdir -p $HCOM4DB_LIBRARYS/zlib
-mkdir -p $HCOM4DB_LIBRARYS/lz4
 
 export LIB_PATH=$binarylib_dir/kernel/dependency
 export P_LIB_PATH=$binarylib_dir/kernel/platform
@@ -128,12 +126,10 @@ export P_LIB_PATH=$binarylib_dir/kernel/platform
 cp -r $P_LIB_PATH/Huawei_Secure_C/comm/lib           $HCOM4DB_LIBRARYS/huawei_security/lib
 cp -r $LIB_PATH/openssl/comm/lib                     $HCOM4DB_LIBRARYS/openssl/lib
 cp -r $LIB_PATH/zlib1.2.11/comm/lib                  $HCOM4DB_LIBRARYS/zlib/lib
-cp -r $LIB_PATH/lz4/comm/lib                         $HCOM4DB_LIBRARYS/lz4/lib
 
 cp -r $P_LIB_PATH/Huawei_Secure_C/comm/include       $HCOM4DB_LIBRARYS/huawei_security/include
 cp -r $LIB_PATH/openssl/comm/include                 $HCOM4DB_LIBRARYS/openssl/include
 cp -r $LIB_PATH/zlib1.2.11/comm/include              $HCOM4DB_LIBRARYS/zlib/include
-cp -r $LIB_PATH/lz4/comm/include                     $HCOM4DB_LIBRARYS/lz4/include
 
 cd $PACKAGE
 if [ "$build_tool"x == "cmake"x ];then
