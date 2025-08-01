@@ -125,24 +125,21 @@ set(HCOM4DB_SRC_PATH        ${CMAKE_CURRENT_SOURCE_DIR}/src)
 set(HCOM4DB_SECUREC_INC_PATH        "${CMAKE_CURRENT_SOURCE_DIR}/library/huawei_security/include/")
 set(HCOM4DB_OPENSSL_PATH            "${CMAKE_CURRENT_SOURCE_DIR}/library/openssl/include/")
 set(ZLIB_INC_PATH               "${CMAKE_CURRENT_SOURCE_DIR}/library/zlib/include/")
-set(LZ4_INC_PATH                "${CMAKE_CURRENT_SOURCE_DIR}/library/lz4/include/")
 
 ## lib
 set(SECUREC_LIB_PATH            "${CMAKE_CURRENT_SOURCE_DIR}/library/huawei_security/lib/")
 set(OPENSSL_LIB_PATH            "${CMAKE_CURRENT_SOURCE_DIR}/library/openssl/lib/")
 set(ZLIB_PATH                   "${CMAKE_CURRENT_SOURCE_DIR}/library/zlib/lib/")
-set(LZ4_LIB_PATH                "${CMAKE_CURRENT_SOURCE_DIR}/library/lz4/lib/")
 
 ## output path
 set (LIBRARY_OUTPUT_PATH        ${CMAKE_CURRENT_SOURCE_DIR}/output/lib)
 set (EXECUTABLE_OUTPUT_PATH     ${CMAKE_CURRENT_SOURCE_DIR}/output/bin)
 
-link_directories(${LIBRARY_OUTPUT_PATH} ${SECUREC_LIB_PATH} ${OPENSSL_LIB_PATH} ${ZLIB_PATH} ${LZ4_LIB_PATH})
+link_directories(${LIBRARY_OUTPUT_PATH} ${SECUREC_LIB_PATH} ${OPENSSL_LIB_PATH} ${ZLIB_PATH})
 
 set(vpp_libsecurec "securec")
 set(3rd_libssl "ssl")
 set(sdp "sdp")
 set(zlib "z")
-set(3rd_liblz4 "lz4")
 
 add_subdirectory(src)

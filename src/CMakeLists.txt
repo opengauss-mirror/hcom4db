@@ -7,7 +7,6 @@ include_directories(.)
 include_directories(${HCOM4DB_SECUREC_INC_PATH})
 include_directories(${HCOM4DB_OPENSSL_PATH})
 include_directories(${ZLIB_INC_PATH})
-include_directories(${LZ4_INC_PATH})
 
 ## source
 aux_source_directory(./ COMMON_SRC)
