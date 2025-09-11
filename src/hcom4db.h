@@ -82,6 +82,7 @@ typedef enum {
  * @brief Communication type to use.
  * Value : "TCP" for use TCP mode.(only use OckRpcClientCall to send message)
  *         "RDMA" for use RDMA mode
+ *         "UBC" for use UBC mode
  *
  * Default is "RDMA" if you do not configurate this option.
  */
