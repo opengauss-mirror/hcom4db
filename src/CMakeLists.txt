@@ -15,7 +15,7 @@ set(COMMON_ALL_SRC
         )
 
 add_library(hcom4db SHARED ${COMMON_ALL_SRC})
-target_link_libraries(hcom4db pthread dl rt -Wl,--whole-archive ${vpp_libsecurec} -Wl,--no-whole-archive)
+target_link_libraries(hcom4db pthread dl rt -Wl,--whole-archive ${vpp_libsecurec} -Wl,--no-whole-archive -Wl,-z,relro -Wl,-z,now)
 
 add_library(hcom4db_static STATIC ${COMMON_ALL_SRC})
 set_property(TARGET hcom4db_static PROPERTY OUTPUT_NAME "hcom4db")
