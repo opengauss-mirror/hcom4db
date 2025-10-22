@@ -61,6 +61,7 @@ constexpr uint16_t DEFAULT_HEARTBEAT_IDLE_TIME = 1;
 constexpr uint16_t MAX_MESSAGE_ID_SIZE = 1000;
 constexpr uint32_t MAX_SEGMENT_SIZE = 943718400;
 constexpr uint32_t MAX_SEGMENT_COUNT = 65535;
+constexpr uint16_t ALIGNED_SIZE = 4096;
 constexpr uint16_t MAX_CALL_WITH_PARAMS_COUNT = 8;
 constexpr uint16_t MAX_MESSAGE_SGL_COUNT = 4;
 constexpr const char *HCOM4DB_SO_NAME = "libhcom.so";
@@ -205,7 +206,7 @@ static int OckRpcSetAllocatorOption(std::map<std::string, const char *> &configM
         OCK_RPC_LOG_WARN("Memory size < 4096, has setted it to min size 4096");
     }
 
-    uintptr_t beginAddr = reinterpret_cast<uintptr_t>(std::malloc(allocatorSize));
+    uintptr_t beginAddr = reinterpret_cast<uintptr_t>(aligned_alloc(ALIGNED_SIZE, allocatorSize));
     if (beginAddr == 0) {
         OCK_RPC_LOG_ERROR("Memory allocator malloc failed, size:" << allocatorSize);
         return OCK_RPC_ERR;
@@ -446,6 +447,7 @@ static int OckRpcCreateServer(std::map<std::string, const char *> &configMap, Oc
     auto iterType = configMap.find(OCK_RPC_STR_COMMUNICATION_TYPE);
     const char *expectType = "TCP";
     const char *expectTypeRdma = "RDMA";
+    const char *expectTypeUbc = "UBC";
     if (iterType != configMap.end()) {
         if (!strcmp(iterType->second, expectType)) {
             type = C_SERVICE_TCP;
@@ -455,6 +457,10 @@ static int OckRpcCreateServer(std::map<std::string, const char *> &configMap, Oc
             type = C_SERVICE_RDMA;
             g_connectionType = C_SERVICE_RDMA;
             OCK_RPC_LOG_INFO("Create transport type RDMA");
+        } else if (!strcmp(iterType->second, expectTypeUbc)) {
+            type = C_SERVICE_UBC;
+            g_connectionType = C_SERVICE_UBC;
+            OCK_RPC_LOG_INFO("Create transport type UBC");
         } else {
             OCK_RPC_LOG_ERROR("Invalid transport type, should be TCP or RDMA");
             return OCK_RPC_ERR_INVALID_PARAM;
@@ -1057,7 +1063,7 @@ static int32_t OckRpcCheckClientCreateCfg(
 }
 
 OckRpcStatus OckRpcClientConnectWithCfg(
-    const char  *ip, uint16_t port, OckRpcClient *client, OckRpcCreateConfig *configs)
+    const char *ip, uint16_t port, OckRpcClient *client, OckRpcCreateConfig *configs)
 {
     if (OckRpcCheckClientCreateCfg(ip, port, client, configs) != OCK_RPC_OK) {
         return OCK_RPC_ERR_INVALID_PARAM;

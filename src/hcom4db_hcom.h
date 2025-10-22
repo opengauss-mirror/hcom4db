@@ -71,6 +71,7 @@ typedef struct {
     uintptr_t lAddress; // local memory region address
     uint32_t lKey;      // local memory region key
     uint32_t size;      // data size
+    void *tseg;
 } Service_MemoryRegionInfo;
 
 /**
@@ -90,6 +91,9 @@ typedef struct {
     uint32_t lKey;      // local memory region key, for rdma etc.
     uint32_t rKey;      // remote memory region key, for rdma etc.
     uint32_t size;      // buffer size
+    unsigned long memid;
+    void *srcSeg;
+    void *dstSeg;
 } __attribute__((packed)) Service_Request;
 
 typedef struct {
@@ -126,7 +130,7 @@ typedef uintptr_t Service_RspCtx;
  * @brief Callback function which will be invoked by async use mode
  */
 
-typedef void (*Channel_CallbackFunc)(void *arg, Service_Context);
+typedef void (*Channel_CallbackFunc)(void *arg, Service_Context context);
 
 /**
  * @brief RPC call completion handle.
@@ -807,6 +811,7 @@ typedef enum {
 typedef enum {
     C_SERVICE_OOB_TCP = 0,
     C_SERVICE_OOB_UDS = 1,
+    C_SERVICE_OOB_UB = 2,
 } Service_OobType;
 
 /**
@@ -846,11 +851,15 @@ typedef enum {
     C_SERVICE_NET_SEC_TWO_WAY = 2,
 } Service_SecType;
 
+typedef enum {
+    C_SERVICE_LOWLATENCY = 0,
+    C_SERVICE_HIGHBANDWIDTH = 1,
+} Service_UbcMode;
+
 typedef struct {
     char netDeviceIpMask[NUM_256];      // ip mask for devices
     char netDeviceIpGroup[NUM_1024];    // ip group for devices
     uint16_t enableTls;                 // enable ssl
-    Service_TlsMode tlsMode;            // tls mode, default is openssl
     Service_SecType secType;            // security type
     Service_TlsVersion tlsVersion;      // tls version, default is TLS1.3 (772)
     Service_CipherSuite cipherSuite;    // if tls enabled can set cipher suite, client and server should be same
@@ -863,9 +872,8 @@ typedef struct {
     Service_WorkingMode mode;           // worker polling modem could busy polling or event polling
     char workerGroups[NUM_64];          // worker groups, for example 1,3,3
     char workerGroupsCpuSet[NUM_128];   // worker groups cpu set, for example 1-1,2-5,na
-    char multiRailWorkerGroups[NUM_256];        // worker groups, for example 1,3,3;1,2,3
-    char multiRailWorkerGroupsCpuSet[NUM_512];  // worker groups cpu set, for example 1-1,2-5,na;7-8,9-10,11-13
-    // worker thread priority [-20, 20], 20 is the lowest, -20 is the highest, 0 (default) means do not set priority
+    char workerGroupsThreadPriority[NUM_64];
+    // worker thread priority [-20, 19], 19 is the lowest, -20 is the highest, 0 (default) means do not set priority
     int workerThreadPriority;
     /* connection setting */
     Service_OobType oobType;    // oob type,tcp or UDS, UDS cannot accept remote connection
@@ -899,10 +907,10 @@ typedef struct {
     uint32_t qpSendQueueSize;           // max send working request of qp for rdma
     uint32_t qpReceiveQueueSize;        // max receive working request of qp for rdma
     uint32_t maxConnectionNum;          // max connection number
+    uint8_t slave;
     char oobPortRange[NUM_16];          // port range when enable port auto selection
     uint16_t enableMultiRail;           // enable MultiRail
-    uint32_t minSegmentSize;            // multi rail split min size 8k~8M
-    uint64_t allocateResSize;           // multiRail allocate resource size
+    Service_UbcMode ubcMode;
 } Service_Options;
 
 /**
@@ -928,6 +936,7 @@ typedef struct {
     uint8_t clientGrpNo;   /* indicates which server worker group to connect to */
     uint8_t serverGrpNo;   /* indicates which server worker group to connect to */
     uint32_t flags;        /* for server default 0, for client sync ep : SER_C_CHANNEL_SELF_POLLING, SER_C_CHANNEL_EVENT_POLLING */
+    unsigned long memid;
 } Service_ConnectOpt;
 
 typedef enum {
@@ -1006,6 +1015,10 @@ typedef enum {
     C_SERVICE_TCP = 1,
     C_SERVICE_UDS = 2,
     C_SERVICE_SHM = 3,
+    C_SERVICE_UB = 4,
+    C_SERVICE_UBOE = 5,
+    C_SERVICE_UBC = 6,
+    C_SERVICE_HSHMEM = 7,
 } Service_Type;
 
 /**
